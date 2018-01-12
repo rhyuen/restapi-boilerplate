@@ -1,4 +1,5 @@
 const express = require("express");
+const winston = require("winston");
 const app = express();
 const wrapAsync = require("./common/util.js");
 const middleware = require("./common/middleware.js");
@@ -21,7 +22,8 @@ app.get("*", wrapAsync(async (req, res, next) => {
 }));
 
 app.use((err, req, res, next) => {        
-    res.json({
+    winston.log("error", `App caught an error: ${e}`);
+    res.status(500).json({
         message: "Something went wrong.", 
         error: err.message,
         code: err.httpStatusCode
