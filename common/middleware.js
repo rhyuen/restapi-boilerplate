@@ -1,4 +1,5 @@
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 const config = require("../config.js");
@@ -10,8 +11,12 @@ module.exports = (app) => {
 
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended: false}));
+    app.use(cookieParser(config.getSecrets().cookieSecret, {
+        httpOnly: true,
+        maxAge: 7200
+    }));
     app.use(logger("dev")); 
-    mongoose.connection.openUri(config.mongo)
+    mongoose.connection.openUri(config.getSecrets().db)
         .once("open",  () => {            
             console.log("DB Connection OPEN.");
         }).on("error", e => {
