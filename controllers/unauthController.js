@@ -6,7 +6,7 @@ exports.index = wrapAsync(async (req, res) => {
             message: "Welcome to my generic service.",
             routes: "Routes available are /"
     });    
-})
+});
 
 exports.notFound = wrapAsync(async (req, res, next) => {    
     res.status(404).json({
